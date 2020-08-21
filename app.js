@@ -52,7 +52,7 @@ var UIController = (function() {
 
 //GLOBAL APP CONTROLLER
 var controller = (function(budgetCtrl, UICtrl) {
-    var  ctrlAddItem, input, DOM;
+    var ctrlAddItem, input, DOM;
 
     DOM = UICtrl.getDOMstr();
 
