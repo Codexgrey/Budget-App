@@ -30,17 +30,17 @@ var budgetController = (function() {
 
     return {
         addItem: function(type, des, val) {
-            var newItem, ID, typeArr;
+            var newItem, ID, itemArr;
 
-            typeArr = data.allItems[type]; //typeArr being inc or exp item arrays
+            itemArr = data.allItems[type]; //itemArr being inc or exp item arrays
             
             /* create/determine new ID
              [1, 2, 3, 4, 5], next ID = 6; This is not plausible, as we expect to delete items from both arrays.
              [1, 2, 4, 5, 8], next ID = 9; This is! As it allows for deleted items & is in order.
              .'. ID = last ID + 1
              */
-            if(typeArr.length > 0) {
-                ID = typeArr[typeArr.length - 1].id + 1;
+            if(itemArr.length > 0) {
+                ID = itemArr[itemArr.length - 1].id + 1;
             } else {
                 ID = 0;
             }
@@ -53,7 +53,7 @@ var budgetController = (function() {
             }
 
             // add newItem into our data structure
-            typeArr.push(newItem);
+            itemArr.push(newItem);
 
             // return newItem
             return newItem;
@@ -102,6 +102,27 @@ var UIController = (function() {
                 description: document.querySelector(DOMstr.inputDescription).value,
                 value: document.querySelector(DOMstr.inputValue).value
             };
+        },
+
+        addListItem: function(obj, type) {
+            var html, newHtml, itemContainer;
+
+            // create HTML string with some placeholder text
+            if(type === 'inc') {
+                itemContainer = DOMstr.incomeContainer;
+                html = '<div class="item clearfix" id="income-%id%"><div class="item__description">%description%</div><div class="right clearfix"><div class="item__value">%value%</div><div class="item__delete"><button class="item__delete--btn"><i class="ion-ios-close-outline"></i></button></div></div></div>';
+            } else if(type === 'exp') {
+                itemContainer = DOMstr.expensesContainer;
+                html = '<div class="item clearfix" id="expense-%id%"><div class="item__description">%description%</div><div class="right clearfix"><div class="item__value">%value%</div><div class="item__percentage">21%</div><div class="item__delete"><button class="item__delete--btn"><i class="ion-ios-close-outline"></i></button></div></div></div>';
+            }
+
+            // replace the placeholder texts with some actual data
+            newHtml = html.replace('%id%', obj.id);
+            newHtml = newHtml.replace('%description%', obj.description);
+            newHtml = newHtml.replace('%value%', obj.value);
+
+            // insert HTML into the DOM.
+            document.querySelector(itemContainer).insertAdjacentHTML('beforeend', newHtml);
         }
     };
 
@@ -139,7 +160,7 @@ var controller = (function(budgetCtrl, UICtrl) {
         newItem = budgetCtrl.addItem(input.type, input.description, input.value);
 
         // add new item to the UI
-
+        UICtrl.addListItem(newItem, input.type);
         // calculate the budget
 
         // display the budget on the UI
