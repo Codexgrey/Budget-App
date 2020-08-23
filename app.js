@@ -1,6 +1,6 @@
 //BUDGET CONTROLLER
 var budgetController = (function() {
-    var Income, Expense, data;
+    var Income, Expense, data, calcTotals;
 
     Income = function(id, description, value) {
         this.id = id;
@@ -16,6 +16,18 @@ var budgetController = (function() {
     };
 
 
+    calcTotals = function(type) {
+        var sum, itemArr;
+        sum = 0;
+        itemArr = data.allItems[type];
+
+        itemArr.forEach(function(curr) {
+            sum += curr.value;
+        })
+        data.totals[type] = sum;
+    };
+
+
     data = {
         allItems: {
             inc: [],
@@ -24,7 +36,9 @@ var budgetController = (function() {
         totals: {
             inc: 0,
             exp: 0
-        }
+        },
+        budget: 0,
+        percentage: -1
     };
 
 
@@ -57,6 +71,33 @@ var budgetController = (function() {
 
             // return newItem
             return newItem;
+        },
+
+        calcBudget: function() {
+
+            // calculate the total inc and exp
+            calcTotals('inc');
+            calcTotals('exp');
+
+            // calculate the budget: inc - exp
+            data.budget = data.totals.inc - data.totals.exp;
+
+            // calculate percentage of income spent
+            if(data.totals.inc > 0) {
+                data.percentage = Math.round((data.totals.exp / data.totals.inc) * 100);
+            } else {
+                data.percentage = -1;
+            }
+            
+        },
+
+        getBudget: function() {
+            return {
+                budget: data.budget,
+                totalInc: data.totals.inc,
+                totalExp: data.totals.exp,
+                percentage: data.percentage
+            }
         },
 
         testing: function() {
@@ -164,13 +205,16 @@ var controller = (function(budgetCtrl, UICtrl) {
 
 
     updateBudget = function() {
+        var budget;
 
         // calculate the budget
+        budgetCtrl.calcBudget();
 
         // return the budget
+        budget = budgetCtrl.getBudget();
 
         // display the budget on the UI
-
+        console.log(budget);
     };
 
 
