@@ -176,6 +176,20 @@ var UIController = (function() {
                 curr.value = "";
             });
             fieldsArr[0].focus();
+        },
+
+        displayBudget: function(obj) {
+
+            document.querySelector(DOMstr.budgetLabel).textContent = obj.budget;
+            document.querySelector(DOMstr.incomeLabel).textContent = obj.totalInc;
+            document.querySelector(DOMstr.expensesLabel).textContent = obj.totalExp;
+
+            if(obj.percentage > 0) {
+                document.querySelector(DOMstr.percentageLabel).textContent = obj.percentage + '%';
+            } else {
+                document.querySelector(DOMstr.percentageLabel).textContent = '---';
+            };
+            
         }
     };
 
@@ -214,7 +228,7 @@ var controller = (function(budgetCtrl, UICtrl) {
         budget = budgetCtrl.getBudget();
 
         // display the budget on the UI
-        console.log(budget);
+        UICtrl.displayBudget(budget);
     };
 
 
@@ -244,6 +258,12 @@ var controller = (function(budgetCtrl, UICtrl) {
     return {
         init: function() {
             console.log('Application has started!')
+            UICtrl.displayBudget({
+                budget: 0,
+                totalInc: 0,
+                totalExp: 0,
+                percentage: -1
+            });
             setupEventListeners();
         }
     }
