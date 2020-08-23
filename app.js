@@ -100,7 +100,7 @@ var UIController = (function() {
             return {
                 type: document.querySelector(DOMstr.inputType).value, // will be inc or exp
                 description: document.querySelector(DOMstr.inputDescription).value,
-                value: document.querySelector(DOMstr.inputValue).value
+                value: parseFloat(document.querySelector(DOMstr.inputValue).value)
             };
         },
 
@@ -147,7 +147,7 @@ var UIController = (function() {
 
 //GLOBAL APP CONTROLLER
 var controller = (function(budgetCtrl, UICtrl) {
-    var ctrlAddItem, setupEventListeners;
+    var ctrlAddItem, setupEventListeners, updateBudget;
 
     setupEventListeners = function() {
         var DOM;
@@ -162,12 +162,25 @@ var controller = (function(budgetCtrl, UICtrl) {
 
     };
 
+
+    updateBudget = function() {
+
+        // calculate the budget
+
+        // return the budget
+
+        // display the budget on the UI
+
+    };
+
+
     ctrlAddItem = function() {
         var input, newItem;
 
         // get the field input data
         input = UICtrl.getInput();
 
+        if(input.description !== "" && !isNaN(input.value) && input.value > 0) {
         // add the item to the budget controller
         newItem = budgetCtrl.addItem(input.type, input.description, input.value);
 
@@ -177,10 +190,10 @@ var controller = (function(budgetCtrl, UICtrl) {
         // clear fields
         UICtrl.clearFields();
 
-        // calculate the budget
-
-        // display the budget on the UI
-
+        // calculate and update budget
+        updateBudget();
+        };
+        
     };
 
 
