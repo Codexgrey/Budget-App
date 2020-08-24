@@ -188,6 +188,14 @@ var UIController = (function() {
             document.querySelector(itemContainer).insertAdjacentHTML('beforeend', newHtml);
         },
 
+        deleteListItem: function(selectorID) {
+            var item;
+
+            // item to be deleted
+            item = document.getElementById(selectorID);
+            item.parentNode.removeChild(item);
+        },
+
         clearFields: function() {
             var fields, fieldsArr;
 
@@ -237,7 +245,6 @@ var controller = (function(budgetCtrl, UICtrl) {
             }
         });
         document.querySelector(DOM.container).addEventListener('click', ctrlDeleteItem);
-
     };
 
 
@@ -262,19 +269,18 @@ var controller = (function(budgetCtrl, UICtrl) {
         input = UICtrl.getInput();
 
         if(input.description !== "" && !isNaN(input.value) && input.value > 0) {
-        // add the item to the budget controller
-        newItem = budgetCtrl.addItem(input.type, input.description, input.value);
+            // add the item to the budget controller
+            newItem = budgetCtrl.addItem(input.type, input.description, input.value);
 
-        // add new item to the UI
-        UICtrl.addListItem(newItem, input.type);
+            // add new item to the UI
+            UICtrl.addListItem(newItem, input.type);
 
-        // clear fields
-        UICtrl.clearFields();
+            // clear fields
+            UICtrl.clearFields();
 
-        // calculate and update budget
-        updateBudget();
-        };
-        
+            // calculate and update budget
+            updateBudget();
+        }
     };
 
 
@@ -291,8 +297,10 @@ var controller = (function(budgetCtrl, UICtrl) {
             budgetCtrl.deleteItem(type, ID);
 
             // delete item from the UI
+            UICtrl.deleteListItem(itemID);
 
             // update & show the new budget
+            updateBudget();
         }
     };
 
