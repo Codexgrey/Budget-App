@@ -73,6 +73,28 @@ var budgetController = (function() {
             return newItem;
         },
 
+        deleteItem: function(type, id) {
+            var itemArr, ids;
+
+            /*
+             id = 6
+             itemArr[id]; isn't going to work!
+             ids = [1, 2, 4, 6, 8]; <-- because!
+             index = 3.
+             */
+
+            itemArr = data.allItems[type];
+            ids = itemArr.map(function(curr) {
+                return curr.id;
+            });
+
+            index = ids.indexOf(id);
+            if(index !== -1) {
+                itemArr.splice(index, 1);
+            };
+
+        },
+
         calcBudget: function() {
 
             // calculate the total inc and exp
@@ -263,9 +285,10 @@ var controller = (function(budgetCtrl, UICtrl) {
         if(itemID) {
             splitID = itemID.split('-');
             type = splitID[0];
-            ID = splitID[1];
+            ID = parseInt(splitID[1]);
 
             // delete item from the data structure
+            budgetCtrl.deleteItem(type, ID);
 
             // delete item from the UI
 
