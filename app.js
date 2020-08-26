@@ -131,18 +131,18 @@ var budgetController = (function() {
 
         calcPercents: function() {
             var expArr, totalIncome;
+
             expArr = data.allItems.exp;
             totalIncome = data.totals.inc;
-
-            expArr.forEach(function(curr) {
-                curr.calcPercentage(totalIncome);
-            });
+                expArr.forEach(function(curr) {
+                    curr.calcPercentage(totalIncome);
+                });
         },
 
         getPercents: function() {
             var expArr, allPercents;
-            expArr = data.allItems.exp;
 
+            expArr = data.allItems.exp;
             allPercents = expArr.map(function(curr) {
                 return curr.getPercentage();
             });
@@ -258,6 +258,25 @@ var UIController = (function() {
                 document.querySelector(DOMstr.percentageLabel).textContent = '---';
             };
             
+        },
+
+        displayPercents: function(percentage) {
+            var fields, nodeListForEach;
+
+            fields = document.querySelectorAll(DOMstr.expensesPercentLabel);
+            nodeListForEach = function(list, callback) {
+                for(var i = 0; i < list.length; i++) {
+                    callback(list[i], i);
+                }
+            };
+
+            nodeListForEach(fields, function(curr, index) {
+                if(percentage[index] > 0) {
+                    curr.textContent = percentage[index] + '%';
+                } else {
+                    curr.textContent = '---';
+                }
+            });
         }
     };
 
@@ -359,7 +378,7 @@ var controller = (function(budgetCtrl, UICtrl) {
         percents = budgetCtrl.getPercents();
 
         // update the UI with the new percentages
-        console.log(percents);
+        UICtrl.displayPercents(percents);
     };
 
 
