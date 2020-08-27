@@ -172,7 +172,7 @@ var budgetController = (function() {
 
 //UI CONTROLLER
 var UIController = (function() {
-    var DOMstr, formatNumber;
+    var DOMstr, formatNumber, nodeListForEach;
 
     DOMstr = {
         inputType: '.add__type',
@@ -188,6 +188,13 @@ var UIController = (function() {
         container: '.container',
         expensesPercentLabel: '.item__percentage',
         dateLabel: '.budget__title--month'
+    };
+
+
+    nodeListForEach = function(list, callback) {
+        for(var i = 0; i < list.length; i++) {
+            callback(list[i], i);
+        }
     };
 
 
@@ -286,14 +293,7 @@ var UIController = (function() {
         },
 
         displayPercents: function(percentage) {
-            var fields, nodeListForEach;
-
-            fields = document.querySelectorAll(DOMstr.expensesPercentLabel);
-            nodeListForEach = function(list, callback) {
-                for(var i = 0; i < list.length; i++) {
-                    callback(list[i], i);
-                }
-            };
+            var fields = document.querySelectorAll(DOMstr.expensesPercentLabel);
 
             nodeListForEach(fields, function(curr, index) {
                 if(percentage[index] > 0) {
@@ -316,6 +316,20 @@ var UIController = (function() {
             year = now.getFullYear();
 
             document.querySelector(DOMstr.dateLabel).textContent = months[month] + ' ' + year;
+        },
+
+        changeType: function() {
+            var fields = document.querySelectorAll(
+                DOMstr.inputType + ',' +
+                DOMstr.inputDescription + ',' +
+                DOMstr.inputValue
+            );
+
+            nodeListForEach(fields, function(curr, index) {
+                curr.classList.toggle('red-focus');
+            });
+
+            document.querySelector(DOMstr.inputBtn).classList.toggle('red');
         }
 
     };
@@ -342,6 +356,7 @@ var controller = (function(budgetCtrl, UICtrl) {
             }
         });
         document.querySelector(DOM.container).addEventListener('click', ctrlDeleteItem);
+        document.querySelector(DOM.inputType).addEventListener('change', UICtrl.changeType);
     };
 
 
