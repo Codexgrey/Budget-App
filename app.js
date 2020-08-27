@@ -302,6 +302,20 @@ var UIController = (function() {
                     curr.textContent = '---';
                 }
             });
+        },
+
+        displayDate: function() {
+            var now, month, months, year;
+
+            now = new Date(); //e.g christmas = new Date(2020, 11, 25); Date is zero based.
+            month = now.getMonth();
+            months = [
+                'January', 'February', 'March', 'April', 'May', 'June',
+                'July', 'August', 'September', 'October', 'November', 'December'
+            ];
+            year = now.getFullYear();
+
+            document.querySelector(DOMstr.dateLabel).textContent = months[month] + ' ' + year;
         }
 
     };
@@ -411,6 +425,7 @@ var controller = (function(budgetCtrl, UICtrl) {
     return {
         init: function() {
             console.log('Application has started!')
+            UICtrl.displayDate();
             UICtrl.displayBudget({
                 budget: 0,
                 totalInc: 0,
