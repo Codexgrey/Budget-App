@@ -1,1 +1,4 @@
 # Budget-App
+
+I built this using vanilla javascript. 
+My thanks to Mr Jonas Schmedtmann for his wonderful course on javascript which was a massive help in building this.
